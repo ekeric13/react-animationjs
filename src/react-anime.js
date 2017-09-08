@@ -3,11 +3,7 @@ import isEqual from 'lodash.isequal';
 const anime = typeof window !== 'undefined' ? require('animejs') : _ => _;
 
 export class Anime extends Component {
-  props: AnimeProps;
-
-  targets: any[];
-
-  constructor(props: AnimeProps) {
+  constructor(props) {
     super(props);
 
     // Current Anime DOM Targets
@@ -52,13 +48,14 @@ export class Anime extends Component {
       next: !childrenWereRemoved ? difChildren : this.children.next
     };
 
-    this.createAnime();
+    this.createAnime(nextProps);
   }
 
-  createAnime = (props: AnimeProps) => {
+  createAnime = (props = this.props) => {
 
-    let animeProps = { targets: this.targets, ...this.props };
+    let animeProps = { targets: this.targets, ...props };
 
+    anime.remove(this.targets);
     delete animeProps.children;
 
     if (typeof this.anime === undefined)

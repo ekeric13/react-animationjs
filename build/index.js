@@ -42,20 +42,7 @@ var Anime = exports.Anime = function (_Component) {
     // Current Anime DOM Targets
     var _this = _possibleConstructorReturn(this, (Anime.__proto__ || Object.getPrototypeOf(Anime)).call(this, props));
 
-    _this.createAnime = function (props) {
-
-      var animeProps = _extends({ targets: _this.targets }, _this.props);
-
-      delete animeProps.children;
-
-      if (_typeof(_this.anime) === undefined) _this.anime = anime(animeProps);else {
-        _this.anime = anime(animeProps);
-      }
-    };
-
-    _this.addTarget = function (newTarget) {
-      _this.targets = [].concat(_toConsumableArray(_this.targets), [newTarget]);
-    };
+    _initialiseProps.call(_this);
 
     _this.targets = [];
 
@@ -107,7 +94,7 @@ var Anime = exports.Anime = function (_Component) {
         next: !childrenWereRemoved ? difChildren : this.children.next
       };
 
-      this.createAnime();
+      this.createAnime(nextProps);
     }
   }, {
     key: 'render',
@@ -138,5 +125,27 @@ var Anime = exports.Anime = function (_Component) {
 
   return Anime;
 }(_react.Component);
+
+var _initialiseProps = function _initialiseProps() {
+  var _this3 = this;
+
+  this.createAnime = function () {
+    var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _this3.props;
+
+
+    var animeProps = _extends({ targets: _this3.targets }, props);
+
+    anime.remove(_this3.targets);
+    delete animeProps.children;
+
+    if (_typeof(_this3.anime) === undefined) _this3.anime = anime(animeProps);else {
+      _this3.anime = anime(animeProps);
+    }
+  };
+
+  this.addTarget = function (newTarget) {
+    _this3.targets = [].concat(_toConsumableArray(_this3.targets), [newTarget]);
+  };
+};
 
 exports.default = Anime;

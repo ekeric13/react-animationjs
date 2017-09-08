@@ -1,6 +1,6 @@
 {
   "name": "react-anime",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "(ﾉ´ヮ´)ﾉ*:･ﾟ✧ A super easy animation library for React.",
   "main": "build/index.js",
   "typings": "dist/react-anime.d.ts",
@@ -9,7 +9,8 @@
     "watch": "webpack -w src/react-anime.js dist/react-anime.js",
     "pretest": "jest -u",
     "test": "jest --coverage",
-    "coverage": "nyc npm test && nyc report --reporter=lcov && codecov"
+    "coverage": "nyc npm test && nyc report --reporter=lcov && codecov",
+    "newbuild": "make build"
   },
   "jest": {
     "coverageDirectory": "./coverage/",
