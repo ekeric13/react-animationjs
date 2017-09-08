@@ -1,6 +1,6 @@
 {
   "name": "react-anime",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "(ﾉ´ヮ´)ﾉ*:･ﾟ✧ A super easy animation library for React.",
   "main": "build/index.js",
   "typings": "dist/react-anime.d.ts",
@@ -41,6 +41,10 @@
       "name": "Kennet Postigo",
       "email": "kennetfpostigo@gmail.com",
       "url": " http://kpostigo.com"
+    },
+    {
+      "name": "Eric Kennedy",
+      "email": "ekeric13@gmail.com"
     }
   ],
   "license": "MIT",
