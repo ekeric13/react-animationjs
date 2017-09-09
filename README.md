@@ -1,0 +1,1 @@
+This is a temp copy of https://github.com/hyperfuse/react-anime
