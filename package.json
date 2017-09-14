@@ -1,6 +1,6 @@
 {
   "name": "react-animationjs",
-  "version": "2.0.7",
+  "version": "2.1.0",
   "description": "(ﾉ´ヮ´)ﾉ*:･ﾟ✧ A super easy animation library for React.",
   "main": "build/index.js",
   "typings": "dist/react-anime.d.ts",

@@ -13,14 +13,12 @@ export class Anime extends Component {
     let { children } = props;
     if (!Array.isArray(children)) children = [children];
     this.children = {
-      cur: children,
-      prev: [],
-      next: []
+      cur: children
     };
   }
 
   componentDidMount() {
-    this.createAnime();
+    this.updateAnime();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -30,59 +28,73 @@ export class Anime extends Component {
     if (!Array.isArray(children)) children = [children];
     if (!Array.isArray(prevChildren)) prevChildren = [prevChildren];
 
-    // Determine diff children
-    let difChildren = children.filter(
-      v => !prevChildren.reduce((prev, cur) => prev || isEqual(v, cur), false)
-    );
+    const filteredChildren = children.filter((el)=> el !== null);
+    const filteredPrevChildren = prevChildren.filter((el)=> el !== null);
+    // new child added
+    if ( filteredChildren.length > filteredPrevChildren.length ) {
+      this.props.onEnter();
+      // child removed
+    } else if ( filteredChildren.length < filteredPrevChildren.length ) {
+      this.props.onExit();
+    }
 
-    // Determine if children are added/removed
-    let childrenWereRemoved = difChildren.reduce(
-      (prev, cur) => prev || prevChildren.indexOf(cur) > -1,
-      false
-    );
-
-    // Split children to current, old, and new
     this.children = {
-      cur: children.filter(c => difChildren.indexOf(c) < 0),
-      prev: childrenWereRemoved ? difChildren : this.children.prev,
-      next: !childrenWereRemoved ? difChildren : this.children.next
+      cur: children
     };
 
-    this.createAnime(nextProps);
+    this.updateAnime(nextProps);
+  }
+
+  // componentDidUpdate() {
+  //   this.createAnime(this.props);
+  // }
+
+  updateAnime = (props = this.props) => {
+    let animeProps = { targets: this.targets, ...props };
+    anime.remove(this.targets);
+    delete animeProps.children;
+    this.anime = anime(animeProps);
   }
 
   createAnime = (props = this.props) => {
-
     let animeProps = { targets: this.targets, ...props };
+    this.anime = anime(animeProps);
+  }
 
+  removeAnime = (props = this.props) => {
+    let animeProps = { targets: this.targets, ...props };
     anime.remove(this.targets);
     delete animeProps.children;
-
-    if (typeof this.anime === undefined)
-      this.anime = anime(animeProps);
-    else {
-      this.anime = anime(animeProps);
-    }
-  };
+  }
 
   addTarget = newTarget => {
-    this.targets = [...this.targets, newTarget];
-  };
+    this.targets = [...this.targets, newTarget].filter((el)=> el !== null);
+  }
 
   /**
    * Render children, and their diffs until promise of anime finishes.
    */
   render() {
     let { style } = this.props;
-    let { cur, prev, next } = this.children;
+    let { cur } = this.children;
 
     return (
       <g style={{ ...style }}>
-        {cur.map((child, i) =>
-          React.cloneElement(child, { key: i, ref: this.addTarget }))}
+        {
+          cur
+          .filter((el)=> el !== null )
+          .map((child, i) =>
+            React.cloneElement(child, { key: i, ref: this.addTarget })
+          )
+        }
       </g>
     );
   }
 }
+
+Anime.defaultProps = {
+  onEnter: ()=>{},
+  onExit: ()=>{},
+};
 
 export default Anime;

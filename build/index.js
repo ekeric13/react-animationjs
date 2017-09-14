@@ -5,8 +5,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Anime = undefined;
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -51,9 +49,7 @@ var Anime = exports.Anime = function (_Component) {
 
     if (!Array.isArray(children)) children = [children];
     _this.children = {
-      cur: children,
-      prev: [],
-      next: []
+      cur: children
     };
     return _this;
   }
@@ -61,7 +57,7 @@ var Anime = exports.Anime = function (_Component) {
   _createClass(Anime, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      this.createAnime();
+      this.updateAnime();
     }
   }, {
     key: 'componentWillReceiveProps',
@@ -73,28 +69,30 @@ var Anime = exports.Anime = function (_Component) {
       if (!Array.isArray(children)) children = [children];
       if (!Array.isArray(prevChildren)) prevChildren = [prevChildren];
 
-      // Determine diff children
-      var difChildren = children.filter(function (v) {
-        return !prevChildren.reduce(function (prev, cur) {
-          return prev || (0, _lodash2.default)(v, cur);
-        }, false);
+      var filteredChildren = children.filter(function (el) {
+        return el !== null;
       });
+      var filteredPrevChildren = prevChildren.filter(function (el) {
+        return el !== null;
+      });
+      // new child added
+      if (filteredChildren.length > filteredPrevChildren.length) {
+        this.props.onEnter();
+        // child removed
+      } else if (filteredChildren.length < filteredPrevChildren.length) {
+        this.props.onExit();
+      }
 
-      // Determine if children are added/removed
-      var childrenWereRemoved = difChildren.reduce(function (prev, cur) {
-        return prev || prevChildren.indexOf(cur) > -1;
-      }, false);
-
-      // Split children to current, old, and new
       this.children = {
-        cur: children.filter(function (c) {
-          return difChildren.indexOf(c) < 0;
-        }),
-        prev: childrenWereRemoved ? difChildren : this.children.prev,
-        next: !childrenWereRemoved ? difChildren : this.children.next
+        cur: children
       };
 
-      this.createAnime(nextProps);
+      this.removeAnime(nextProps);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      this.createAnime(this.props);
     }
   }, {
     key: 'render',
@@ -107,16 +105,15 @@ var Anime = exports.Anime = function (_Component) {
       var _this2 = this;
 
       var style = this.props.style;
-      var _children = this.children,
-          cur = _children.cur,
-          prev = _children.prev,
-          next = _children.next;
+      var cur = this.children.cur;
 
 
       return _react2.default.createElement(
         'g',
         { style: _extends({}, style) },
-        cur.map(function (child, i) {
+        cur.filter(function (el) {
+          return el !== null;
+        }).map(function (child, i) {
           return _react2.default.cloneElement(child, { key: i, ref: _this2.addTarget });
         })
       );
@@ -129,23 +126,40 @@ var Anime = exports.Anime = function (_Component) {
 var _initialiseProps = function _initialiseProps() {
   var _this3 = this;
 
+  this.updateAnime = function () {
+    var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _this3.props;
+
+    var animeProps = _extends({ targets: _this3.targets }, props);
+    anime.remove(_this3.targets);
+    delete animeProps.children;
+    _this3.anime = anime(animeProps);
+  };
+
   this.createAnime = function () {
     var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _this3.props;
 
+    var animeProps = _extends({ targets: _this3.targets }, props);
+    _this3.anime = anime(animeProps);
+  };
+
+  this.removeAnime = function () {
+    var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _this3.props;
 
     var animeProps = _extends({ targets: _this3.targets }, props);
-
     anime.remove(_this3.targets);
     delete animeProps.children;
-
-    if (_typeof(_this3.anime) === undefined) _this3.anime = anime(animeProps);else {
-      _this3.anime = anime(animeProps);
-    }
   };
 
   this.addTarget = function (newTarget) {
-    _this3.targets = [].concat(_toConsumableArray(_this3.targets), [newTarget]);
+    _this3.targets = [].concat(_toConsumableArray(_this3.targets), [newTarget]).filter(function (el) {
+      return el !== null;
+    });
   };
+};
+
+Anime.defaultProps = {
+  onEnter: function onEnter() {},
+  onExit: function onExit() {}
 };
 
 exports.default = Anime;
