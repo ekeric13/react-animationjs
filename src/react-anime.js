@@ -2,6 +2,19 @@ import React, { Component } from 'react';
 import isEqual from 'lodash.isequal';
 const anime = typeof window !== 'undefined' ? require('animejs') : _ => _;
 
+function filterNullEls (el) {
+  return  el !== null;
+}
+
+function filterNullKeys (el) {
+  return el.key !== null;
+}
+
+function createKeyHash (hash, el) {
+  hash[el.key] = true;
+  return hash;
+}
+
 export class Anime extends Component {
   constructor(props) {
     super(props);
@@ -28,14 +41,22 @@ export class Anime extends Component {
     if (!Array.isArray(children)) children = [children];
     if (!Array.isArray(prevChildren)) prevChildren = [prevChildren];
 
-    const filteredChildren = children.filter((el)=> el !== null);
-    const filteredPrevChildren = prevChildren.filter((el)=> el !== null);
+    const filteredChildren = children.filter(filterNullEls);
+    const filteredPrevChildren = prevChildren.filter(filterNullEls);
     // new child added
     if ( filteredChildren.length > filteredPrevChildren.length ) {
-      this.props.onEnter();
+      const filteredPrevChildrenHash = filteredPrevChildren.filter(filterNullKeys).reduce(createKeyHash, {});
+      const addedChildren = filteredChildren.filter(filterNullKeys).filter((el)=>{
+        return !filteredPrevChildrenHash.hasOwnProperty(el.key);
+      });
+      this.props.onEnter(addedChildren);
       // child removed
     } else if ( filteredChildren.length < filteredPrevChildren.length ) {
-      this.props.onExit();
+      const filteredChildrenHash = filteredChildren.filter(filterNullKeys).reduce(createKeyHash, {});
+      const removedChildren = filteredPrevChildren.filter(filterNullKeys).filter((el)=>{
+        return !filteredChildrenHash.hasOwnProperty(el.key);
+      });
+      this.props.onExit(removedChildren);
     }
 
     this.children = {
@@ -68,7 +89,7 @@ export class Anime extends Component {
   }
 
   addTarget = newTarget => {
-    this.targets = [...this.targets, newTarget].filter((el)=> el !== null);
+    this.targets = [...this.targets, newTarget].filter(filterNullEls);
   }
 
   /**
@@ -82,7 +103,7 @@ export class Anime extends Component {
       <g style={{ ...style }}>
         {
           cur
-          .filter((el)=> el !== null )
+          .filter(filterNullEls)
           .map((child, i) =>
             React.cloneElement(child, { key: i, ref: this.addTarget })
           )
