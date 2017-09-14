@@ -31,6 +31,19 @@ var anime = typeof window !== 'undefined' ? require('animejs') : function (_) {
   return _;
 };
 
+function filterNullEls(el) {
+  return el !== null;
+}
+
+function filterNullKeys(el) {
+  return el.key !== null;
+}
+
+function createKeyHash(hash, el) {
+  hash[el.key] = true;
+  return hash;
+}
+
 var Anime = exports.Anime = function (_Component) {
   _inherits(Anime, _Component);
 
@@ -69,31 +82,35 @@ var Anime = exports.Anime = function (_Component) {
       if (!Array.isArray(children)) children = [children];
       if (!Array.isArray(prevChildren)) prevChildren = [prevChildren];
 
-      var filteredChildren = children.filter(function (el) {
-        return el !== null;
-      });
-      var filteredPrevChildren = prevChildren.filter(function (el) {
-        return el !== null;
-      });
+      var filteredChildren = children.filter(filterNullEls);
+      var filteredPrevChildren = prevChildren.filter(filterNullEls);
       // new child added
       if (filteredChildren.length > filteredPrevChildren.length) {
-        this.props.onEnter();
+        var filteredPrevChildrenHash = filteredPrevChildren.filter(filterNullKeys).reduce(createKeyHash, {});
+        var addedChildren = filteredChildren.filter(filterNullKeys).filter(function (el) {
+          return !filteredPrevChildrenHash.hasOwnProperty(el.key);
+        });
+        this.props.onEnter(addedChildren);
         // child removed
       } else if (filteredChildren.length < filteredPrevChildren.length) {
-        this.props.onExit();
+        var filteredChildrenHash = filteredChildren.filter(filterNullKeys).reduce(createKeyHash, {});
+        var removedChildren = filteredPrevChildren.filter(filterNullKeys).filter(function (el) {
+          return !filteredChildrenHash.hasOwnProperty(el.key);
+        });
+        this.props.onExit(removedChildren);
       }
 
       this.children = {
         cur: children
       };
 
-      this.removeAnime(nextProps);
+      this.updateAnime(nextProps);
     }
-  }, {
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate() {
-      this.createAnime(this.props);
-    }
+
+    // componentDidUpdate() {
+    //   this.createAnime(this.props);
+    // }
+
   }, {
     key: 'render',
 
@@ -111,9 +128,7 @@ var Anime = exports.Anime = function (_Component) {
       return _react2.default.createElement(
         'g',
         { style: _extends({}, style) },
-        cur.filter(function (el) {
-          return el !== null;
-        }).map(function (child, i) {
+        cur.filter(filterNullEls).map(function (child, i) {
           return _react2.default.cloneElement(child, { key: i, ref: _this2.addTarget });
         })
       );
@@ -151,9 +166,7 @@ var _initialiseProps = function _initialiseProps() {
   };
 
   this.addTarget = function (newTarget) {
-    _this3.targets = [].concat(_toConsumableArray(_this3.targets), [newTarget]).filter(function (el) {
-      return el !== null;
-    });
+    _this3.targets = [].concat(_toConsumableArray(_this3.targets), [newTarget]).filter(filterNullEls);
   };
 };
 
