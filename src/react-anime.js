@@ -96,11 +96,11 @@ export class Anime extends Component {
    * Render children, and their diffs until promise of anime finishes.
    */
   render() {
-    let { style } = this.props;
+    let { styleEl } = this.props;
     let { cur } = this.children;
 
     return (
-      <g style={{ ...style }}>
+      <g style={{ ...styleEl }}>
         {
           cur
           .filter(filterNullEls)
