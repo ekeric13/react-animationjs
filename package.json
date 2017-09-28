@@ -1,6 +1,6 @@
 {
   "name": "react-animationjs",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "description": "An animation library that applies anime.js to it's react children",
   "main": "build/index.js",
   "typings": "dist/react-anime.d.ts",
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/ekeric13/react-animation.git"
+    "url": "git+ssh://git@github.com/ekeric13/react-animationjs.git"
   },
   "keywords": [
     "animation",
@@ -50,7 +50,7 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/hyperfuse/react-anime/issues"
+    "url": "https://github.com/ekeric13/react-animationjs/issues"
   },
   "homepage": "https://hyperfuse.github.io/react-anime",
   "devDependencies": {
