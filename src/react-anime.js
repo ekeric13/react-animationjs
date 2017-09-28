@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import isEqual from 'lodash.isequal';
+import ReactDOM from 'react-dom';
 const anime = typeof window !== 'undefined' ? require('animejs') : _ => _;
 
 function filterNullEls (el) {
@@ -89,6 +90,9 @@ export class Anime extends Component {
   }
 
   addTarget = newTarget => {
+    if ( newTarget instanceof Component ) {
+      newTarget = ReactDOM.findDOMNode(newTarget);
+    }
     this.targets = [...this.targets, newTarget].filter(filterNullEls);
   }
 
