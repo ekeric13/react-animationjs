@@ -17,6 +17,10 @@ var _lodash = require('lodash.isequal');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
+var _reactDom = require('react-dom');
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -121,13 +125,13 @@ var Anime = exports.Anime = function (_Component) {
     value: function render() {
       var _this2 = this;
 
-      var style = this.props.style;
+      var styleEl = this.props.styleEl;
       var cur = this.children.cur;
 
 
       return _react2.default.createElement(
         'g',
-        { style: _extends({}, style) },
+        { style: _extends({}, styleEl) },
         cur.filter(filterNullEls).map(function (child, i) {
           return _react2.default.cloneElement(child, { key: i, ref: _this2.addTarget });
         })
@@ -166,6 +170,9 @@ var _initialiseProps = function _initialiseProps() {
   };
 
   this.addTarget = function (newTarget) {
+    if (newTarget instanceof _react.Component) {
+      newTarget = _reactDom2.default.findDOMNode(newTarget);
+    }
     _this3.targets = [].concat(_toConsumableArray(_this3.targets), [newTarget]).filter(filterNullEls);
   };
 };
