@@ -1,6 +1,6 @@
 {
   "name": "react-animationjs",
-  "version": "2.3.3",
+  "version": "2.4.0",
   "description": "An animation library that applies anime.js to it's react children",
   "main": "build/index.js",
   "typings": "dist/react-anime.d.ts",

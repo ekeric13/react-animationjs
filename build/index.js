@@ -133,7 +133,7 @@ var Anime = exports.Anime = function (_Component) {
         'g',
         { style: _extends({}, styleEl) },
         cur.filter(filterNullEls).map(function (child, i) {
-          return _react2.default.cloneElement(child, { key: i, ref: _this2.addTarget });
+          return _react2.default.cloneElement(child, { key: i, ref: _this2.addTarget, innerRef: _this2.addTarget });
         })
       );
     }
