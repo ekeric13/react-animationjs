@@ -109,7 +109,7 @@ export class Anime extends Component {
           cur
           .filter(filterNullEls)
           .map((child, i) =>
-            React.cloneElement(child, { key: i, ref: this.addTarget })
+            React.cloneElement(child, { key: i, ref: this.addTarget, innerRef: this.addTarget })
           )
         }
       </g>
