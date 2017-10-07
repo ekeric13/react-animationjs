@@ -116,12 +116,19 @@ var Anime = exports.Anime = function (_Component) {
     // }
 
   }, {
-    key: 'render',
-
+    key: 'checkIfStyledComponent',
+    value: function checkIfStyledComponent(child) {
+      if (typeof child.type === 'function') {
+        return child.type.displayName === 'styled(Component)';
+      }
+    }
 
     /**
      * Render children, and their diffs until promise of anime finishes.
      */
+
+  }, {
+    key: 'render',
     value: function render() {
       var _this2 = this;
 
@@ -133,7 +140,14 @@ var Anime = exports.Anime = function (_Component) {
         'g',
         { style: _extends({}, styleEl) },
         cur.filter(filterNullEls).map(function (child, i) {
-          return _react2.default.cloneElement(child, { key: i, ref: _this2.addTarget, innerRef: _this2.addTarget });
+          var props = {
+            key: i,
+            ref: _this2.addTarget
+          };
+          if (_this2.checkIfStyledComponent(child)) {
+            props.innerRef = _this2.addTarget;
+          }
+          return _react2.default.cloneElement(child, props);
         })
       );
     }
