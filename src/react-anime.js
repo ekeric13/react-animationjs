@@ -96,6 +96,12 @@ export class Anime extends Component {
     this.targets = [...this.targets, newTarget].filter(filterNullEls);
   }
 
+  checkIfStyledComponent(child) {
+    if ( typeof child.type === 'function' ) {
+      return child.type.displayName === 'styled(Component)';
+    }
+  }
+
   /**
    * Render children, and their diffs until promise of anime finishes.
    */
@@ -108,9 +114,16 @@ export class Anime extends Component {
         {
           cur
           .filter(filterNullEls)
-          .map((child, i) =>
-            React.cloneElement(child, { key: i, ref: this.addTarget, innerRef: this.addTarget })
-          )
+          .map((child, i) =>{
+            let props = {
+              key: i,
+              ref: this.addTarget
+            };
+            if (this.checkIfStyledComponent(child)) {
+              props.innerRef = this.addTarget;
+            }          
+            return React.cloneElement(child, props);
+          })
         }
       </g>
     );
