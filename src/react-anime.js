@@ -27,7 +27,7 @@ export class Anime extends Component {
     let { children } = props;
     if (!Array.isArray(children)) children = [children];
     this.children = {
-      cur: children
+      cur: children.filter(filterNullEls)
     };
   }
 
@@ -63,6 +63,7 @@ export class Anime extends Component {
     this.children = {
       cur: children
     };
+    
 
     this.updateAnime(nextProps);
   }
@@ -72,9 +73,13 @@ export class Anime extends Component {
   // }
 
   updateAnime = (props = this.props) => {
-    let animeProps = { targets: this.targets, ...props };
+    let modifiedProps = Object.assign({}, props);
+    delete modifiedProps['styleEl'];
+    delete modifiedProps['onEnter'];
+    delete modifiedProps['onExit'];
+    delete modifiedProps.children;
+    const animeProps = { targets: this.targets, ...modifiedProps };
     anime.remove(this.targets);
-    delete animeProps.children;
     this.anime = anime(animeProps);
   }
 
@@ -133,6 +138,7 @@ export class Anime extends Component {
 Anime.defaultProps = {
   onEnter: ()=>{},
   onExit: ()=>{},
+  styleEl: {}
 };
 
 export default Anime;
