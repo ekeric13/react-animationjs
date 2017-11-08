@@ -66,7 +66,7 @@ var Anime = exports.Anime = function (_Component) {
 
     if (!Array.isArray(children)) children = [children];
     _this.children = {
-      cur: children
+      cur: children.filter(filterNullEls)
     };
     return _this;
   }
@@ -162,9 +162,13 @@ var _initialiseProps = function _initialiseProps() {
   this.updateAnime = function () {
     var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _this3.props;
 
-    var animeProps = _extends({ targets: _this3.targets }, props);
+    var modifiedProps = Object.assign({}, props);
+    delete modifiedProps['styleEl'];
+    delete modifiedProps['onEnter'];
+    delete modifiedProps['onExit'];
+    delete modifiedProps.children;
+    var animeProps = _extends({ targets: _this3.targets }, modifiedProps);
     anime.remove(_this3.targets);
-    delete animeProps.children;
     _this3.anime = anime(animeProps);
   };
 
@@ -193,7 +197,8 @@ var _initialiseProps = function _initialiseProps() {
 
 Anime.defaultProps = {
   onEnter: function onEnter() {},
-  onExit: function onExit() {}
+  onExit: function onExit() {},
+  styleEl: {}
 };
 
 exports.default = Anime;
