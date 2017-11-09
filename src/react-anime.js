@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import isEqual from 'lodash.isequal';
 import ReactDOM from 'react-dom';
 const anime = typeof window !== 'undefined' ? require('animejs') : _ => _;
 
@@ -115,7 +114,7 @@ export class Anime extends Component {
     let { cur } = this.children;
 
     return (
-      <g style={{ ...styleEl }}>
+      <div style={{ ...styleEl }}>
         {
           cur
           .filter(filterNullEls)
@@ -130,7 +129,7 @@ export class Anime extends Component {
             return React.cloneElement(child, props);
           })
         }
-      </g>
+      </div>
     );
   }
 }

@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`2 children delayed fade in 1`] = `
-<g
+<div
   style={Object {}}
 >
   <p>
@@ -10,5 +10,5 @@ exports[`2 children delayed fade in 1`] = `
   <p>
     2
   </p>
-</g>
+</div>
 `;

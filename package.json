@@ -1,6 +1,6 @@
 {
   "name": "react-animationjs",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "description": "An animation library that applies anime.js to it's react children",
   "main": "build/index.js",
   "typings": "dist/react-anime.d.ts",
@@ -74,14 +74,14 @@
     "react-dom": "^16.x",
     "react-fatigue-dev": "github:ekeric13/react-fatigue-dev",
     "react-test-renderer": "^16.0.x",
-    "webpack": "^3.8.x"
+    "webpack": "^3.8.x",
+    "lodash.isequal": "^4.5.0"
   },
   "peerDependencies": {
     "react": "^16.x",
     "react-dom": "^16.x"
   },
   "dependencies": {
-    "animejs": "^2.2.0",
-    "lodash.isequal": "^4.5.0"
+    "animejs": "^2.2.0"
   }
 }

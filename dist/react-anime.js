@@ -84,11 +84,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _lodash = __webpack_require__(2);
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
-var _reactDom = __webpack_require__(3);
+var _reactDom = __webpack_require__(2);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
@@ -102,7 +98,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var anime = typeof window !== 'undefined' ? __webpack_require__(4) : function (_) {
+var anime = typeof window !== 'undefined' ? __webpack_require__(3) : function (_) {
   return _;
 };
 
@@ -208,7 +204,7 @@ var Anime = exports.Anime = function (_Component) {
 
 
       return _react2.default.createElement(
-        'g',
+        'div',
         { style: _extends({}, styleEl) },
         cur.filter(filterNullEls).map(function (child, i) {
           var props = {
@@ -284,16 +280,10 @@ module.exports = require("react");
 /* 2 */
 /***/ (function(module, exports) {
 
-module.exports = require("lodash.isequal");
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports) {
-
 module.exports = require("react-dom");
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports) {
 
 module.exports = require("animejs");
